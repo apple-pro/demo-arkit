@@ -20,13 +20,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.showsStatistics = true
         
-        let planets = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus"]
+        let planets = ["mercury": 0.383, "venus": 0.949, "earth":1, "mars": 0.532, "jupiter":11.21, "saturn":9.45, "uranus":4.01]
         
         var startLocation: Float = 0.0
-        for planet in planets {
-            let planetNode = createPlanet(planet, x: startLocation, y: 0, z: -0.5, radius: 0.01)
+        for (planet, size) in planets {
+            let planetNode = createPlanet(planet, x: startLocation, y: 0, z: -0.5, radius: CGFloat(0.02 * size))
             
-            startLocation -= 0.02
+            startLocation -= 0.5
             sceneView.scene.rootNode.addChildNode(planetNode)
         }
         
