@@ -17,17 +17,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the view's delegate
         sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
-        // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let planets = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus"]
         
-        // Set the scene to the view
-        sceneView.scene = scene
+        var startLocation: Float = 0.0
+        for planet in planets {
+            let planetNode = createPlanet(planet, x: startLocation, y: 0, z: -0.5, radius: 0.01)
+            
+            startLocation -= 0.02
+            sceneView.scene.rootNode.addChildNode(planetNode)
+        }
+        
+        sceneView.autoenablesDefaultLighting = true
+    }
+    
+    private func createPlanet(_ planet: String, x: Float, y: Float, z: Float, radius: CGFloat) -> SCNNode {
+        let marsTexture = SCNMaterial()
+        marsTexture.diffuse.contents = UIImage(named: "art.scnassets/\(planet).jpg")
+        
+        let marsSphere = SCNSphere(radius: radius) //a 0.2m ball
+        marsSphere.materials = [marsTexture]
+        
+        let node = SCNNode()
+        node.position = SCNVector3(x: x, y: y, z: z)
+        node.geometry = marsSphere
+        
+        return node
     }
     
     override func viewWillAppear(_ animated: Bool) {
